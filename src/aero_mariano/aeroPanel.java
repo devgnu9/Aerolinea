@@ -79,6 +79,7 @@ public class aeroPanel extends javax.swing.JFrame {
         btnReservar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnRegistros = new javax.swing.JButton();
+        btnCancelarReserva = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,6 +130,13 @@ public class aeroPanel extends javax.swing.JFrame {
             }
         });
 
+        btnCancelarReserva.setText("Cancelar Reservación");
+        btnCancelarReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarReservaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -143,9 +151,11 @@ public class aeroPanel extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnReservar, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(128, 128, 128)
-                                .addComponent(btnRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelarReserva)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)
                                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18))
                             .addComponent(jScrollPane1)
@@ -165,7 +175,8 @@ public class aeroPanel extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                     .addComponent(btnReservar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSalir))
+                    .addComponent(btnSalir)
+                    .addComponent(btnCancelarReserva))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
@@ -180,7 +191,19 @@ public class aeroPanel extends javax.swing.JFrame {
         
         //NUMERO DE ASIENTO
         arreglo_asiento = Integer.parseInt(JOptionPane.showInputDialog(null,"¿Que asiento quieres?"));
-        //Para que verifique si está ocupado el asientos
+        
+        if (arreglo_asiento >= 11) 
+        {
+            JOptionPane.showMessageDialog(null,"Ingresaste un número fuera del rango permitido \nIngresa un número válido");
+        }
+        else
+        {
+            //Opcion de clase
+            opcionVuelo opcion = new opcionVuelo();
+        
+            opcion.setVisible(true);
+        }
+        
         for (int m = 0; m < 10; m++) 
         {
             if (arreglo_asiento == asientos[m] && reservaciones[m] == "[ █ ]") 
@@ -229,10 +252,7 @@ public class aeroPanel extends javax.swing.JFrame {
         txtaPanel.append("\n");
         txtaPanel.append("\n\t\t\tASIENTOS DISPONIBLES: [ ▒ ]");
         txtaPanel.append("\n\t\t\tASIENTOS OCUPADOS: [ █ ]");
-        //Opcion de clase
-        opcionVuelo opcion = new opcionVuelo();
         
-        opcion.setVisible(true);
         
     }                                           
 
@@ -257,6 +277,63 @@ public class aeroPanel extends javax.swing.JFrame {
         
         
     }                                            
+
+    private void btnCancelarReservaActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+         /*-------------------------------------------------------------------*/
+         /*--------------------- CANCELAR RESERVACION   ----------------------*/
+         /*-------------------------------------------------------------------*/
+        
+        int cancelar_asiento = Integer.parseInt(JOptionPane.showInputDialog(null,"¿Que asiento quieres cancelar?"));
+        
+        
+        for (int m = 0; m < 10; m++) 
+        {
+            if (cancelar_asiento == asientos[m] && reservaciones[m] == "[ █ ]") 
+            {
+                txtaPanel.setText("Primera Clase:\n");
+                //VALIDACION
+                //Modifica los primeros 5 registros del arreglo
+                for (int c =0; c < 5; c++) 
+                {
+                    //OCUPADO
+                    if (cancelar_asiento == asientos[c]) 
+                    {
+                        txtaPanel.append(" "+ asientos[c]);
+                        //Valor en posicion del vector numerico
+                        reservaciones[m] = "[ ▒ ]";
+                
+                    }
+                    //Imprime el vector de los codigos ascii
+                    txtaPanel.append("\t" + asientos[c] + reservaciones[c]);
+                }
+                
+                txtaPanel.append("\nSegunda Clase:\n");
+
+                for (int c = 0; c < 10; c++) 
+                {
+                    if (asientos[c] >= 6)
+                    {
+                        //OCUPADO
+                        if (cancelar_asiento == asientos[c]) 
+                        {
+                            txtaPanel.append(" "+ asientos[c]);
+                            //Valor en posicion del vector numerico
+                            reservaciones[c] = "[ ▒ ]";
+                        }
+                    //Imprime el vector de los codigos ascii
+                    txtaPanel.append("\t" + asientos[c] + reservaciones[c]);
+                    }   
+                }
+        
+                txtaPanel.append("\n");
+                txtaPanel.append("\n");
+                txtaPanel.append("\n");
+                txtaPanel.append("\n\t\t\tASIENTOS DISPONIBLES: [ ▒ ]");
+                txtaPanel.append("\n\t\t\tASIENTOS OCUPADOS: [ █ ]");
+            }
+        }
+        
+    }                                                  
 
     /**
      * @param args the command line arguments
@@ -294,6 +371,7 @@ public class aeroPanel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton btnCancelarReserva;
     private javax.swing.JButton btnRegistros;
     private javax.swing.JButton btnReservar;
     private javax.swing.JButton btnSalir;
